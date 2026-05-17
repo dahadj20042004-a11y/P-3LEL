@@ -10,27 +10,18 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
-          distribution: 'temurin'
-          java-version: '17'
+          distribution: 'zulu'
+          java-version: '11' # هاد النسخة تمشي مع فلاتر القديم
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          # اخترنا هاد النسخة لأنها مستقرة لمشروعك
-          flutter-version: '3.10.0'
+          flutter-version: '2.10.5' # هادي هي النسخة اللي راح تحل المشكل
           channel: 'stable'
 
       - name: Get dependencies
         run: flutter pub get
 
       - name: Build APK
-        # هاد السطر هو "العفسة" اللي تتجاوز مشاكل الـ Null Safety والـ Embedding القديم
-        run: |
-          flutter clean
-          flutter build apk --release --no-sound-null-safety
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: LawnMower-Final-APK
-          path: build/app/outputs/flutter-apk/app-release.apk
+        # هاد السطر يفرض البناء بلا ما يحوس على Null Safety اللي راه حابسنا
+        run: flutter build apk --release --no-sound-null-safety
