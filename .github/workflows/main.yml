@@ -1,4 +1,4 @@
-name: Build APK
+اوname: Build APK
 on: [push, workflow_dispatch]
 
 jobs:
@@ -10,25 +10,27 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
-          distribution: 'zulu'
-          java-version: '11'
+          distribution: 'temurin'
+          java-version: '17'
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          # راح نستعملو نسخة متوسطة تدعم مشروعك بلا مشاكل
-          flutter-version: '3.19.0'
+          flutter-version: '3.10.0'
           channel: 'stable'
 
-      - name: Get dependencies
-        run: flutter pub get
+      - name: Force Get Dependencies
+        # استعملنا هاد الأمر لتجاوز أي تعارض في المكتبات
+        run: flutter pub get --supress-analytics
 
-      - name: Build APK
-        # نحينا --no-sound-null-safety باش ما يخرجش الخطأ اللي شفته
-        run: flutter build apk --release
+      - name: Clean & Build
+        # أمر التنظيف مهم جداً لمسح أثار المحاولات الفاشلة السابقة
+        run: |
+          flutter clean
+          flutter build apk --release --no-sound-null-safety
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: lawn-mower-apk
+          name: Final-LawnMower-APK
           path: build/app/outputs/flutter-apk/app-release.apk
