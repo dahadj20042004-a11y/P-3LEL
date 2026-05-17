@@ -10,18 +10,20 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
-          distribution: 'zulu'
-          java-version: '11' # هاد النسخة تمشي مع فلاتر القديم
+          distribution: 'temurin'
+          java-version: '11' # نسخة 11 هي اللي تمشي مع فلاتر القديم
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '2.10.5' # هادي هي النسخة اللي راح تحل المشكل
+          flutter-version: '2.10.5' # هادي هي النسخة السحرية لحل مشكلتك
           channel: 'stable'
 
-      - name: Get dependencies
-        run: flutter pub get
+      - name: Repair Project
+        run: |
+          flutter clean
+          flutter pub get
 
       - name: Build APK
-        # هاد السطر يفرض البناء بلا ما يحوس على Null Safety اللي راه حابسنا
+        # هاد الأمر يتجاهل كل مشاكل الـ Null Safety والـ Embedding
         run: flutter build apk --release --no-sound-null-safety
