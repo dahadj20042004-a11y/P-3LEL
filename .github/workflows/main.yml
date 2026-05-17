@@ -16,6 +16,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
+          # اخترنا هاد النسخة لأنها مستقرة لمشروعك
           flutter-version: '3.10.0'
           channel: 'stable'
 
@@ -23,6 +24,7 @@ jobs:
         run: flutter pub get
 
       - name: Build APK
+        # هاد السطر هو "العفسة" اللي تتجاوز مشاكل الـ Null Safety والـ Embedding القديم
         run: |
           flutter clean
           flutter build apk --release --no-sound-null-safety
