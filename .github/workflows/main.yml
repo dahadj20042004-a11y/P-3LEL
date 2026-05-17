@@ -11,19 +11,20 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: '11' # نسخة 11 هي اللي تمشي مع فلاتر القديم
+          java-version: '11' 
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '2.10.5' # هادي هي النسخة السحرية لحل مشكلتك
+          flutter-version: '2.10.5'
           channel: 'stable'
 
-      - name: Repair Project
+      - name: Force Project Repair
         run: |
           flutter clean
+          rm -rf .dart_tool
           flutter pub get
 
       - name: Build APK
-        # هاد الأمر يتجاهل كل مشاكل الـ Null Safety والـ Embedding
+        # هاد السطر هو اللي راح "يسلك" الحالة ويتجاوز كل الأخطاء
         run: flutter build apk --release --no-sound-null-safety
