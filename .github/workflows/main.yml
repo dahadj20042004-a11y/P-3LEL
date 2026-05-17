@@ -1,4 +1,4 @@
-اوname: Build APK
+name: Build APK
 on: [push, workflow_dispatch]
 
 jobs:
@@ -19,12 +19,10 @@ jobs:
           flutter-version: '3.10.0'
           channel: 'stable'
 
-      - name: Force Get Dependencies
-        # استعملنا هاد الأمر لتجاوز أي تعارض في المكتبات
-        run: flutter pub get --supress-analytics
+      - name: Get dependencies
+        run: flutter pub get
 
-      - name: Clean & Build
-        # أمر التنظيف مهم جداً لمسح أثار المحاولات الفاشلة السابقة
+      - name: Build APK
         run: |
           flutter clean
           flutter build apk --release --no-sound-null-safety
@@ -32,5 +30,5 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: Final-LawnMower-APK
+          name: LawnMower-Final-APK
           path: build/app/outputs/flutter-apk/app-release.apk
