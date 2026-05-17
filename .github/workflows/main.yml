@@ -16,20 +16,17 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          # نحينا النسخة المحددة وخليناها stable باش يحمل أحدث نسخة مستقرة
-          # ونعالج مشكل الـ v1 embedding بطريقة أخرى لداخل
+          # راح نستعملو نسخة متوسطة تدعم مشروعك بلا مشاكل
+          flutter-version: '3.19.0'
           channel: 'stable'
 
       - name: Get dependencies
-        # أضفنا --legacy-conflicting-deps لتجاوز مشاكل المكتبات القديمة
         run: flutter pub get
 
       - name: Build APK
-        # أضفنا أمر التنظيف قبل البناء لضمان عدم وجود ملفات معطوبة
-        run: |
-          flutter clean
-          flutter build apk --release --no-sound-null-safety
-          
+        # نحينا --no-sound-null-safety باش ما يخرجش الخطأ اللي شفته
+        run: flutter build apk --release
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
