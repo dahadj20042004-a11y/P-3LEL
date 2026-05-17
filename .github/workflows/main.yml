@@ -11,20 +11,23 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: '11' 
+          java-version: '17'
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '2.10.5'
+          flutter-version: '3.16.0'
           channel: 'stable'
 
-      - name: Force Project Repair
+      - name: Create Missing Files & Build
         run: |
-          flutter clean
-          rm -rf .dart_tool
+          # هادي هي "العفسة" اللي راح تصنع مجلد ios اللي طلبه FlutLab
+          flutter create . --overwrite 
           flutter pub get
+          flutter build apk --release --no-sound-null-safety
 
-      - name: Build APK
-        # هاد السطر هو اللي راح "يسلك" الحالة ويتجاوز كل الأخطاء
-        run: flutter build apk --release --no-sound-null-safety
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: LawnMower-Final-APK
+          path: build/app/outputs/flutter-apk/app-release.apk
